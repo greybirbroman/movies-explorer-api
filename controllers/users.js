@@ -12,7 +12,7 @@ const { JWT_SECRET, NODE_ENV } = process.env;
 
 // GET users/me - Возвращаем: email, name
 module.exports.getProfile = (req, res, next) => User
-  .findById(req.user._id).select('+password')
+  .findById(req.user._id)
   .then((user) => {
     if (!user) {
       throw new NotFoundError('Нет пользователя с таким id');
@@ -25,27 +25,27 @@ module.exports.getProfile = (req, res, next) => User
   })
   .catch(next);
 // PATCH users/me - Обновляем: email, name
-module.exports.updateProfile = (req, res, next) => {
+module.exports.updateProfile = async (req, res, next) => {
   const { name, email } = req.body;
-
-  User.findByIdAndUpdate(
-    req.user._id,
-    { name, email },
-    {
-      new: true, // обработчик then получит на вход обновлённую запись
-      runValidators: true, // данные будут валидированы перед изменением
-    },
-  )
-    .then((user) => {
-      res.send({ data: user });
-    })
-    .catch((err) => {
-      if (err.name === 'ValidationError') {
-        next(new BadRequestError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
-      } else {
-        next(err);
-      }
-    });
+  try {
+    const user = await User.findByIdAndUpdate(
+      req.user._id,
+      { name, email },
+      {
+        new: true, // обработчик then получит на вход обновлённую запись
+        runValidators: true, // данные будут валидированы перед изменением
+      },
+    );
+    res.send({ data: user });
+  } catch (err) {
+    if (err.name === 'ValidationError') {
+      next(new BadRequestError(`${Object.values(err.errors).map((error) => error.message).join(', ')}`));
+    } else if (err.code === 11000) {
+      next(new ExistError('Пользователь с такой почтой уже существует'));
+    } else {
+      next(err);
+    }
+  }
 };
 // SIGN-IN Вход в систему
 module.exports.login = (req, res, next) => {

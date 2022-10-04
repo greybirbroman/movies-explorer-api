@@ -1,4 +1,4 @@
-const SERVER_ERROR = require('../utils/constants');
+const { SERVER_ERROR } = require('../utils/constants');
 
 // Централизованная обработка ошибок
 module.exports.errorHandler = (err, req, res, next) => {

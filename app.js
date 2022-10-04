@@ -1,4 +1,3 @@
-require('dotenv').config();
 const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
@@ -8,14 +7,14 @@ const bodyParser = require('body-parser');
 const routes = require('./routes/index');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 const { errorHandler } = require('./middlewares/error-handler');
+const { PORT, MONGO_DB, limiter } = require('./config');
 
-const { PORT = 3000 } = process.env;
 const app = express();
 
 app.use(helmet());
 
 // Connection to database
-mongoose.connect('mongodb://localhost:27017/bitfilmsdb', {
+mongoose.connect(MONGO_DB, {
   useNewUrlParser: true,
   useUnifiedTopology: false,
 })
@@ -38,7 +37,7 @@ app.get('/crash-test', () => {
     throw new Error('Сервер сейчас упадёт');
   }, 0);
 });
-
+app.use(limiter); // Установим Лимитер запросов
 app.use(routes);
 
 app.use(errorLogger); // Подключаем логер ошибок

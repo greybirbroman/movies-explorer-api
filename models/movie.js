@@ -4,7 +4,6 @@ const isUrl = require('validator/lib/isURL');
 const movieSchema = new mongoose.Schema({
   movieId: {
     type: Number,
-    unique: true,
     required: true,
   },
   country: {
@@ -22,12 +21,6 @@ const movieSchema = new mongoose.Schema({
   year: {
     type: String,
     required: true,
-    validate: {
-      validator(v) {
-        return /\d{4}/gi.test(v);
-      },
-      message: 'Неправильный формат поля movie.year',
-    },
   },
   description: {
     type: String,
