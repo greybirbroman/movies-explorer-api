@@ -34,7 +34,7 @@ const movieSchema = new mongoose.Schema({
       message: 'Невереный формат поля movie.image',
     },
   },
-  trailerLink: {
+  trailer: {
     type: String,
     required: true,
     validate: {
