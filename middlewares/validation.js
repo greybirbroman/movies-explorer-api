@@ -10,7 +10,7 @@ const checkUrl = (value, helpers) => {
 
 const validateMovie = celebrate({
   body: Joi.object().keys({
-    movieId: Joi.number().integer().positive().required(),
+    movieId: Joi.number().required(),
     country: Joi.string().required(),
     director: Joi.string().required(),
     duration: Joi.number().integer().positive().required(),
@@ -25,8 +25,8 @@ const validateMovie = celebrate({
 });
 
 const validateMovieId = celebrate({
-  params: Joi.object().keys({
-    movieId: Joi.string().hex().length(24).required(),
+  body: Joi.object().keys({
+    _id: Joi.string().length(24).hex(),
   }),
 });
 

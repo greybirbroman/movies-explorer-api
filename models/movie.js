@@ -5,6 +5,7 @@ const movieSchema = new mongoose.Schema({
   movieId: {
     type: Number,
     required: true,
+    ref: 'movieId',
   },
   country: {
     type: String,
