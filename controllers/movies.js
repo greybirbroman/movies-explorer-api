@@ -33,7 +33,7 @@ module.exports.createMovie = (req, res, next) => {
     owner: req.user._id,
   })
     .then((movie) => {
-      res.status(STATUS_CREATED).send({ data: movie });
+      res.status(STATUS_CREATED).send(movie);
     })
     .catch((err) => {
       if (err.name === 'ValidationError') {
@@ -55,6 +55,6 @@ module.exports.deleteMovie = (req, res, next) => {
       }
       return Movie.findByIdAndRemove(req.params.movieId);
     })
-    .then((movie) => res.send({ data: movie }))
+    .then((movie) => res.send(movie))
     .catch(next);
 };
