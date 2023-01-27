@@ -10,7 +10,7 @@
 ___
 `Пример запроса`
 
-<img src="./controllers/images/Снимок%20экрана%202023-01-27%20в%2013.52.15.png"/>
+<img src="./images/screenshot_post.png"/>
 
 ___
 
